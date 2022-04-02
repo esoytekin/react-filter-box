@@ -1,12 +1,12 @@
-import * as React from 'react';
+import * as React from "react";
 import * as _ from "lodash";
 import * as CodeMirror from "codemirror";
 import "codemirror/addon/hint/show-hint";
 import "codemirror/addon/display/placeholder";
-import "./FilterMode"
-import 'codemirror/lib/codemirror.css';
+import "./FilterMode";
+import "codemirror/lib/codemirror.css";
 import "codemirror/addon/hint/show-hint.css";
-import { UnControlled as ReactCodeMirror, IInstance } from 'react-codemirror2'
+import { UnControlled as ReactCodeMirror, IInstance } from "react-codemirror2";
 
 import grammarUtils from "./GrammarUtils";
 import { ExtendedCodeMirror } from "./models/ExtendedCodeMirror";
@@ -19,19 +19,18 @@ export default class FilterInput extends React.Component<any, any> {
     autoCompletePopup: AutoCompletePopup;
 
     public static defaultProps: any = {
-        onBlur: () => { },
-        onFocus: () => { },
-        editorConfig: { }
+        onBlur: () => {},
+        onFocus: () => {},
+        editorConfig: {},
     };
 
     constructor(props: any) {
         super(props);
 
         if (props.editorConfig) {
-            this.options = { ...props.editorConfig, mode: "filter-mode" }
+            this.options = { ...props.editorConfig, mode: "filter-mode" };
         }
     }
-
 
     findLastSeparatorPositionWithEditor() {
         var doc = this.codeMirror.getDoc();
@@ -40,10 +39,9 @@ export default class FilterInput extends React.Component<any, any> {
         var index = grammarUtils.findLastSeparatorIndex(text);
         return {
             line: currentCursor.line,
-            ch: currentCursor.ch - (text.length - index) + 1
-        }
+            ch: currentCursor.ch - (text.length - index) + 1,
+        };
     }
-
 
     private handlePressingAnyCharacter() {
         if (this.autoCompletePopup.completionShow) {
@@ -53,9 +51,9 @@ export default class FilterInput extends React.Component<any, any> {
         this.autoCompletePopup.show();
     }
 
-    private onSubmit(text: string) {
+    private onSubmit(text: string, e: any) {
         if (this.props.onSubmit) {
-            this.props.onSubmit(text);
+            this.props.onSubmit(text, e);
         }
     }
 
@@ -67,11 +65,15 @@ export default class FilterInput extends React.Component<any, any> {
 
         this.codeMirror = ref.editor;
         this.doc = ref.editor.getDoc();
-        this.autoCompletePopup = new AutoCompletePopup(this.codeMirror, (text) => {
-            return this.props.needAutoCompleteValues(this.codeMirror, text);
-        })
+        this.autoCompletePopup = new AutoCompletePopup(
+            this.codeMirror,
+            (text) => {
+                return this.props.needAutoCompleteValues(this.codeMirror, text);
+            }
+        );
 
-        this.autoCompletePopup.customRenderCompletionItem = this.props.customRenderCompletionItem;
+        this.autoCompletePopup.customRenderCompletionItem =
+            this.props.customRenderCompletionItem;
         this.autoCompletePopup.pick = this.props.autoCompletePick;
 
         ref.editor.on("beforeChange", function (instance, change) {
@@ -82,26 +84,30 @@ export default class FilterInput extends React.Component<any, any> {
 
         ref.editor.on("changes", () => {
             this.handlePressingAnyCharacter();
-        })
+        });
 
         ref.editor.on("focus", (cm, e?) => {
             this.handlePressingAnyCharacter();
             this.props.onFocus(e);
-        })
+        });
 
         ref.editor.on("blur", (cm, e?) => {
-            this.onSubmit(this.doc.getValue());
-            this.props.onBlur(e)
-        })
+            this.onSubmit(this.doc.getValue(), e);
+            this.props.onBlur(e);
+        });
 
         ref.editor.on("keyup", (cm: ExtendedCodeMirror, e?: KeyboardEvent) => {
             if (e.keyCode == 13) {
-                this.onSubmit(this.doc.getValue());
+                this.onSubmit(this.doc.getValue(), e);
             }
         });
     }
 
-    private handleEditorChange(_editor: IInstance, _data: CodeMirror.EditorChange, value: string) {
+    private handleEditorChange(
+        _editor: IInstance,
+        _data: CodeMirror.EditorChange,
+        value: string
+    ) {
         this.props.onChange(value);
     }
 
@@ -111,7 +117,8 @@ export default class FilterInput extends React.Component<any, any> {
                 ref={this.codeMirrorRef.bind(this)}
                 onChange={this.handleEditorChange.bind(this)}
                 options={this.options}
-                value={this.props.value} />
+                value={this.props.value}
+            />
         );
     }
 }
