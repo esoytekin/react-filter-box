@@ -18,6 +18,8 @@ export default class FilterInput extends React.Component<any, any> {
     doc: CodeMirror.Doc;
     autoCompletePopup: AutoCompletePopup;
 
+    cursorPosition: CodeMirror.Position;
+
     public static defaultProps: any = {
         onBlur: () => {},
         onFocus: () => {},
@@ -76,9 +78,10 @@ export default class FilterInput extends React.Component<any, any> {
             this.props.customRenderCompletionItem;
         this.autoCompletePopup.pick = this.props.autoCompletePick;
 
-        ref.editor.on("beforeChange", function (instance, change) {
+        ref.editor.on("beforeChange", (instance, change) => {
             var newtext = change.text.join("").replace(/\n/g, ""); // remove ALL \n !
             change.update(change.from, change.to, [newtext] as any);
+            this.cursorPosition = this.doc.getCursor();
             return true;
         });
 
@@ -86,12 +89,12 @@ export default class FilterInput extends React.Component<any, any> {
             this.handlePressingAnyCharacter();
         });
 
-        ref.editor.on("focus", (cm, e?) => {
+        ref.editor.on("focus", (cm, e?: any) => {
             this.handlePressingAnyCharacter();
             this.props.onFocus(e);
         });
 
-        ref.editor.on("blur", (cm, e?) => {
+        ref.editor.on("blur", (cm, e?: any) => {
             this.onSubmit(this.doc.getValue(), e);
             this.props.onBlur(e);
         });

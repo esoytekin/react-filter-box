@@ -16,12 +16,14 @@ export default class BaseAutoCompleteHandler {
 
     buildDefaultObjOrGetOriginal(
         value: string | Object,
-        type: string
+        type: string,
+        category?: string
     ): HintInfo {
         if (_.isString(value)) {
             return {
                 value: this.quote(value, type),
                 type: type,
+                category,
             };
         }
 
@@ -76,7 +78,8 @@ export default class BaseAutoCompleteHandler {
                         (f) => {
                             return this.buildDefaultObjOrGetOriginal(
                                 f,
-                                "value"
+                                "value",
+                                trace.getLastCategory()
                             );
                         }
                     );

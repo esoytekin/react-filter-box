@@ -20,6 +20,7 @@ export interface ExtendedCodeMirror extends CodeMirror.Editor {
 export interface Completion {
     value: string | Object;
     type?: string;
+    category?: string;
     displayText?: string;
     className?: string;
     render?: (element: any, self: HintResult, data: Completion) => void;
@@ -28,4 +29,5 @@ export interface Completion {
 export interface HintInfo {
     value: string | Object;
     type: string;
+    category?: string;
 }
