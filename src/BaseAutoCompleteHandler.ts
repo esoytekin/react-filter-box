@@ -37,9 +37,10 @@ export default class BaseAutoCompleteHandler {
         error: PEG.PegjsError
     ): HintInfo[] {
         var trace = parseTrace;
-        return _.flatMap(error.expected, (f: PEG.ExpectedItem) => {
+        const hintInfo = _.flatMap(error.expected, (f: PEG.ExpectedItem) => {
             var result: HintInfo[] = [];
-            if (f.type == "literal") {
+
+            if (f.type === "literal") {
                 result = _.map([(f as any).text || f.value], (f) => {
                     return { value: f, type: "literal" };
                 });
@@ -84,6 +85,11 @@ export default class BaseAutoCompleteHandler {
 
             return result;
         });
+
+        const literals = hintInfo.filter((x) => x.type === "literal");
+        const others = hintInfo.filter((x) => x.type !== "literal");
+
+        return [...others, ...literals];
     }
 
     hasCategory(category: string): boolean {
