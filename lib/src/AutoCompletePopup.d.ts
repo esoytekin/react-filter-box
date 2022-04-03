@@ -1,6 +1,6 @@
 import * as CodeMirror from "codemirror";
 import { HintResult, HintOptions, ExtendedCodeMirror, Completion, HintInfo } from "./models/ExtendedCodeMirror";
-import * as React from 'react';
+import * as React from "react";
 export default class AutoCompletePopup {
     private cm;
     private needAutoCompletevalues;

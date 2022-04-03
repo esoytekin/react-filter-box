@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react';
 import "fixed-data-table/dist/fixed-data-table.min.css";
 import "../ReactFilterBox.less";
 import "./app.less";

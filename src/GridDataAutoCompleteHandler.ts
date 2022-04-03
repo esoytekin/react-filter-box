@@ -65,6 +65,7 @@ export default class GridDataAutoCompleteHandler extends BaseAutoCompleteHandler
                 this.cache[found.columnField] = _.chain(this.data)
                     .map((f) => f[found.columnField])
                     .uniq()
+                    .sort()
                     .value();
             }
             return this.cache[found.columnField];

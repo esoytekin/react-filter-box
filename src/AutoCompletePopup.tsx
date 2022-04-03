@@ -1,27 +1,44 @@
 import * as CodeMirror from "codemirror";
 import * as _ from "lodash";
-import { HintResult, HintFunc, HintOptions, ExtendedCodeMirror, Completion, HintInfo } from "./models/ExtendedCodeMirror";
+import {
+    HintResult,
+    HintFunc,
+    HintOptions,
+    ExtendedCodeMirror,
+    Completion,
+    HintInfo,
+} from "./models/ExtendedCodeMirror";
 import grammarUtils from "./GrammarUtils";
-import * as ReactDOM from 'react-dom';
-import * as React from 'react';
+import * as ReactDOM from "react-dom";
+import * as React from "react";
 
 export default class AutoCompletePopup {
     doc: CodeMirror.Doc;
     hintOptions: HintOptions;
     completionShow = false;
     appendSpace = true;
-    customRenderCompletionItem: (self: HintResult, data: Completion, registerAndGetPickFunc: () => PickFunc) => React.ReactElement<any>;
-    pick: (cm: ExtendedCodeMirror, self: HintResult, data: Completion) => string;
+    customRenderCompletionItem: (
+        self: HintResult,
+        data: Completion,
+        registerAndGetPickFunc: () => PickFunc
+    ) => React.ReactElement<any>;
+    pick: (
+        cm: ExtendedCodeMirror,
+        self: HintResult,
+        data: Completion
+    ) => string;
 
-    constructor(private cm: ExtendedCodeMirror, private needAutoCompletevalues: (text: string) => HintInfo[]) {
+    constructor(
+        private cm: ExtendedCodeMirror,
+        private needAutoCompletevalues: (text: string) => HintInfo[]
+    ) {
         this.doc = cm.getDoc();
 
         cm.on("endCompletion", () => {
             this.completionShow = false;
-        })
+        });
 
         this.hintOptions = this.createHintOption();
-
     }
 
     private processText(value: string | Object): any | Object {
@@ -45,27 +62,41 @@ export default class AutoCompletePopup {
             return;
         }
 
-        cm.replaceRange(this.processText(value), self.from, self.to, "complete");
+        cm.replaceRange(
+            this.processText(value),
+            self.from,
+            self.to,
+            "complete"
+        );
     }
 
-    private renderHintElement(element: any, self: HintResult, data: Completion) {
+    private renderHintElement(
+        element: any,
+        self: HintResult,
+        data: Completion
+    ) {
         var div = document.createElement("div");
         var className = ` hint-value cm-${data.type}`;
         var registerAndGetPickFunc = () => {
-
             //hack with show-hint code mirror https://github.com/codemirror/CodeMirror/blob/master/addon/hint/show-hint.js
             // to prevent handling click event
             element.className += " custom";
             setTimeout(() => {
-
-                element.hintId = null
+                element.hintId = null;
             }, 0);
 
             return this.manualPick.bind(this, self, data);
-        }
+        };
 
         if (this.customRenderCompletionItem) {
-            ReactDOM.render(this.customRenderCompletionItem(self, data, registerAndGetPickFunc), div);
+            ReactDOM.render(
+                this.customRenderCompletionItem(
+                    self,
+                    data,
+                    registerAndGetPickFunc
+                ),
+                div
+            );
         } else {
             ReactDOM.render(<div className={className}>{data.value}</div>, div);
         }
@@ -78,11 +109,19 @@ export default class AutoCompletePopup {
         if (completionControl == null) return;
 
         var index = self.list.indexOf(data);
-        data.hint = (cm: ExtendedCodeMirror, self: HintResult, data: Completion) => {
-            cm.replaceRange(this.processText(value), self.from, self.to, "complete");
-        }
+        data.hint = (
+            cm: ExtendedCodeMirror,
+            self: HintResult,
+            data: Completion
+        ) => {
+            cm.replaceRange(
+                this.processText(value),
+                self.from,
+                self.to,
+                "complete"
+            );
+        };
         completionControl.pick(self, index);
-
     }
 
     private buildComletionObj(info: HintInfo): Completion {
@@ -90,7 +129,7 @@ export default class AutoCompletePopup {
             value: info.value,
             type: info.type,
             hint: this.onPick.bind(this),
-            render: this.renderHintElement.bind(this)
+            render: this.renderHintElement.bind(this),
         };
     }
 
@@ -101,20 +140,18 @@ export default class AutoCompletePopup {
         var index = grammarUtils.findLastSeparatorIndex(text);
         return {
             line: currentCursor.line,
-            ch: currentCursor.ch - (text.length - index) + 1
-        }
-
+            ch: currentCursor.ch - (text.length - index) + 1,
+        };
     }
 
     show() {
         var cursor = this.doc.getCursor();
-        var text = this.doc.getRange({ line: 0, ch: 0 }, cursor)
+        var text = this.doc.getRange({ line: 0, ch: 0 }, cursor);
         this.hintOptions.hintValues = this.needAutoCompletevalues(text);
 
         this.cm.showHint(this.hintOptions);
         this.completionShow = true;
     }
-
 
     private createHintOption() {
         var hintOptions = new HintOptions();
@@ -128,17 +165,22 @@ export default class AutoCompletePopup {
 
             var values = hintValues;
             if (text) {
-                values = _.filter(hintValues, f => {
+                values = _.filter(hintValues, (f) => {
                     var value = f.value as string;
-                    return _.isString(f.value) ? _.startsWith(value.toLowerCase(), text.toLowerCase()) : true;
-                })
+                    return _.isString(f.value)
+                        ? _.startsWith(
+                              value.replace(/"/g, "").toLowerCase(),
+                              text.toLowerCase()
+                          )
+                        : true;
+                });
             }
 
             return {
-                list: _.map(values, c => this.buildComletionObj(c)),
+                list: _.map(values, (c) => this.buildComletionObj(c)),
                 from: lastSeparatorPos,
-                to: cursor
-            }
+                to: cursor,
+            };
         }) as HintFunc;
 
         hintOptions.hint.supportsSelection = true;
