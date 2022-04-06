@@ -49,7 +49,7 @@ export default class GridDataAutoCompleteHandler extends BaseAutoCompleteHandler
             return found.customOperatorFunc(parsedCategory);
         }
 
-        return ["==", "!=", "contains", "!contains"];
+        return ["==", "!=", "contains", "!contains", "in"];
     }
 
     needValues(
@@ -58,6 +58,19 @@ export default class GridDataAutoCompleteHandler extends BaseAutoCompleteHandler
         cm: ExtendedCodeMirror
     ): any[] {
         // parsedCategory = this.tryToGetFieldCategory(parsedCategory);
+        if (parsedOperator === "in") {
+            const doc = cm.getDoc();
+            const cursorPos = doc.getCursor();
+            const text = doc.getRange({ line: 0, ch: 0 }, cursorPos);
+
+            const lastIndexIN = text.lastIndexOf(parsedOperator);
+
+            const enteredValue = text.substr(lastIndexIN + 3).trim();
+            if (enteredValue.length && !_.endsWith(enteredValue, ",")) {
+                return [",", "END"];
+            }
+        }
+
         var found = _.find(
             this.options,
             (f) =>
