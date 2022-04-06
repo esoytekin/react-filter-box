@@ -129,6 +129,7 @@ export default class AutoCompletePopup {
             value: info.value,
             type: info.type,
             category: info.category,
+            operator: info.operator,
             hint: this.onPick.bind(this),
             render: this.renderHintElement.bind(this),
         };

@@ -17,13 +17,15 @@ export default class BaseAutoCompleteHandler {
     buildDefaultObjOrGetOriginal(
         value: string | Object,
         type: string,
-        category?: string
+        category?: string,
+        operator?: string
     ): HintInfo {
         if (_.isString(value)) {
             return {
                 value: this.quote(value, type),
                 type: type,
                 category,
+                operator,
             };
         }
 

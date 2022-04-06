@@ -21,6 +21,7 @@ export interface Completion {
     value: string | Object;
     type?: string;
     category?: string;
+    operator?: string;
     displayText?: string;
     className?: string;
     render?: (element: any, self: HintResult, data: Completion) => void;
@@ -30,4 +31,5 @@ export interface HintInfo {
     value: string | Object;
     type: string;
     category?: string;
+    operator?: string;
 }

@@ -77,12 +77,6 @@ export default class Demo1 extends React.Component<any, any> {
                         this.setState({ query });
                     }}
                     autoCompletePick={(cm: any, self: any, data: any) => {
-                        console.log("data", data);
-
-                        if (data.category === "Status") {
-                            return "***";
-                        }
-
                         return data.value;
                     }}
                 />
