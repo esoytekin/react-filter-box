@@ -117,7 +117,8 @@ export default class AutoCompletePopup {
 
     private onPick(cm: ExtendedCodeMirror, self: HintResult, data: Completion) {
         var value = data.value;
-        if (this.pick) {
+
+        if (this.pick && data.value !== '","' && data.value !== '"END"') {
             value = this.pick(cm, self, data);
         }
 
