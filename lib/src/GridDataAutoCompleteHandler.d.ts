@@ -1,5 +1,6 @@
 import BaseAutoCompleteHandler from "./BaseAutoCompleteHandler";
 import Expression from "./Expression";
+import { ExtendedCodeMirror } from "./models/ExtendedCodeMirror";
 export default class GridDataAutoCompleteHandler extends BaseAutoCompleteHandler {
     protected data: any[];
     protected options?: Option[];
@@ -11,7 +12,7 @@ export default class GridDataAutoCompleteHandler extends BaseAutoCompleteHandler
     hasOperator(category: string, operator: string): boolean;
     needCategories(): string[];
     needOperators(parsedCategory: string): string[];
-    needValues(parsedCategory: string, parsedOperator: string): any[];
+    needValues(parsedCategory: string, parsedOperator: string, cm: ExtendedCodeMirror): any[];
 }
 export interface Option {
     columnField: string;

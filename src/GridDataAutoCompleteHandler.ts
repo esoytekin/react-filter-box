@@ -1,6 +1,7 @@
 import BaseAutoCompleteHandler from "./BaseAutoCompleteHandler";
 import Expression from "./Expression";
 import * as _ from "lodash";
+import { ExtendedCodeMirror } from "./models/ExtendedCodeMirror";
 
 export default class GridDataAutoCompleteHandler extends BaseAutoCompleteHandler {
     parseResult: Expression[];
@@ -51,7 +52,11 @@ export default class GridDataAutoCompleteHandler extends BaseAutoCompleteHandler
         return ["==", "!=", "contains", "!contains"];
     }
 
-    needValues(parsedCategory: string, parsedOperator: string): any[] {
+    needValues(
+        parsedCategory: string,
+        parsedOperator: string,
+        cm: ExtendedCodeMirror
+    ): any[] {
         // parsedCategory = this.tryToGetFieldCategory(parsedCategory);
         var found = _.find(
             this.options,

@@ -4,7 +4,7 @@ import * as _ from "lodash";
 import BaseAutoCompleteHandler from "./BaseAutoCompleteHandler";
 import ParseTrace from "./ParseTrace";
 import grammarUtils from "./GrammarUtils";
-import { HintInfo } from "./models/ExtendedCodeMirror";
+import { ExtendedCodeMirror, HintInfo } from "./models/ExtendedCodeMirror";
 import Expression from "./Expression";
 import ParsedError from "./ParsedError";
 
@@ -13,9 +13,7 @@ export default class FilterQueryParser {
     lastError: PEG.PegjsError = null;
 
     parseTrace = new ParseTrace();
-    constructor() {
-
-    }
+    constructor() {}
 
     parse(query: string): Expression[] | ParsedError {
         query = _.trim(query);
@@ -36,18 +34,24 @@ export default class FilterQueryParser {
         return parser.parse(query, { parseTrace: this.parseTrace });
     }
 
-    getSuggestions(query: string): HintInfo[] {
+    getSuggestions(query: string, cm: ExtendedCodeMirror): HintInfo[] {
         query = grammarUtils.stripEndWithNonSeparatorCharacters(query);
         try {
             this.parseQuery(query);
             if (!query || grammarUtils.isLastCharacterWhiteSpace(query)) {
-                return _.map(["AND", "OR"], f => { return { value: f, type: "literal" } });
+                return _.map(["AND", "OR"], (f) => {
+                    return { value: f, type: "literal" };
+                });
             }
 
             return [];
-
         } catch (ex) {
-            return this.autoCompleteHandler.handleParseError(parser, this.parseTrace, ex);
+            return this.autoCompleteHandler.handleParseError(
+                parser,
+                this.parseTrace,
+                ex,
+                cm
+            );
         }
     }
 
@@ -56,5 +60,4 @@ export default class FilterQueryParser {
     }
 }
 
-export interface ExtendedParser extends PEG.Parser {
-}
+export interface ExtendedParser extends PEG.Parser {}

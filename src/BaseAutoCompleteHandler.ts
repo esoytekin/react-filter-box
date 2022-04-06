@@ -2,7 +2,7 @@ import * as _ from "lodash";
 import * as PEG from "pegjs";
 
 import { ExtendedParser } from "./FilterQueryParser";
-import { HintInfo } from "./models/ExtendedCodeMirror";
+import { ExtendedCodeMirror, HintInfo } from "./models/ExtendedCodeMirror";
 import ParseTrace from "./ParseTrace";
 
 export default class BaseAutoCompleteHandler {
@@ -38,7 +38,8 @@ export default class BaseAutoCompleteHandler {
     handleParseError(
         parser: ExtendedParser,
         parseTrace: ParseTrace,
-        error: PEG.PegjsError
+        error: PEG.PegjsError,
+        cm: ExtendedCodeMirror
     ): HintInfo[] {
         var trace = parseTrace;
         const hintInfo = _.flatMap(error.expected, (f: PEG.ExpectedItem) => {
@@ -75,7 +76,8 @@ export default class BaseAutoCompleteHandler {
                     result = _.map(
                         this.needValues(
                             trace.getLastCategory(),
-                            trace.getLastOperator()
+                            trace.getLastOperator(),
+                            cm
                         ),
                         (f) => {
                             return this.buildDefaultObjOrGetOriginal(
@@ -114,7 +116,11 @@ export default class BaseAutoCompleteHandler {
         return [];
     }
 
-    needValues(lastCategory: string, lastOperator: string): string[] {
+    needValues(
+        lastCategory: string,
+        lastOperator: string,
+        cm: ExtendedCodeMirror
+    ): string[] {
         return [];
     }
 }

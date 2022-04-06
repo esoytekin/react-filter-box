@@ -5,11 +5,12 @@ import Expression from "./Expression";
 import FilterQueryParser from "./FilterQueryParser";
 import BaseResultProcessing from "./BaseResultProcessing";
 import BaseAutoCompleteHandler from "./BaseAutoCompleteHandler";
+import { ExtendedCodeMirror } from "./models/ExtendedCodeMirror";
 export default class ReactFilterBox extends React.Component<any, any> {
     static defaultProps: any;
     parser: FilterQueryParser;
     constructor(props: any);
-    needAutoCompleteValues(codeMirror: any, text: string): import("./models/ExtendedCodeMirror").HintInfo[];
+    needAutoCompleteValues(codeMirror: ExtendedCodeMirror, text: string): import("./models/ExtendedCodeMirror").HintInfo[];
     onSubmit(query: string, e: any): any;
     onChange(query: string): void;
     onBlur(): void;

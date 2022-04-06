@@ -12,6 +12,7 @@ import BaseResultProcessing from "./BaseResultProcessing";
 import BaseAutoCompleteHandler from "./BaseAutoCompleteHandler";
 import ParsedError from "./ParsedError";
 import validateQuery from "./validateQuery";
+import { ExtendedCodeMirror } from "./models/ExtendedCodeMirror";
 
 export default class ReactFilterBox extends React.Component<any, any> {
     public static defaultProps: any = {
@@ -47,8 +48,8 @@ export default class ReactFilterBox extends React.Component<any, any> {
         //need onParseOk, onParseError, onChange, options, data
     }
 
-    needAutoCompleteValues(codeMirror: any, text: string) {
-        return this.parser.getSuggestions(text);
+    needAutoCompleteValues(codeMirror: ExtendedCodeMirror, text: string) {
+        return this.parser.getSuggestions(text, codeMirror);
     }
 
     onSubmit(query: string, e: any) {

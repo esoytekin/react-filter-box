@@ -1,10 +1,11 @@
-import * as React from 'react';
+import * as React from "react";
 import "fixed-data-table/dist/fixed-data-table.min.css";
 import { AutoCompleteOption, Expression, GridDataAutoCompleteHandler } from "../ReactFilterBox";
-import 'react-day-picker/lib/style.css';
+import "react-day-picker/lib/style.css";
+import { ExtendedCodeMirror } from "../models/ExtendedCodeMirror";
 declare class CustomAutoComplete extends GridDataAutoCompleteHandler {
     needOperators(parsedCategory: string): string[];
-    needValues(parsedCategory: string, parsedOperator: string): any[];
+    needValues(parsedCategory: string, parsedOperator: string, cm: ExtendedCodeMirror): any[];
 }
 export default class Demo3 extends React.Component<any, any> {
     options: AutoCompleteOption[];
