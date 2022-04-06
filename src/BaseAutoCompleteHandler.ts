@@ -81,7 +81,8 @@ export default class BaseAutoCompleteHandler {
                             return this.buildDefaultObjOrGetOriginal(
                                 f,
                                 "value",
-                                trace.getLastCategory()
+                                trace.getLastCategory(),
+                                trace.getLastOperator()
                             );
                         }
                     );
