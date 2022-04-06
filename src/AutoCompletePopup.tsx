@@ -64,7 +64,7 @@ export default class AutoCompletePopup {
 
         const { operator } = data;
 
-        if (operator !== "in") {
+        if (operator !== "in" && operator !== "!in") {
             return data.value;
         }
 

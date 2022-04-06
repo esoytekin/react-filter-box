@@ -32,7 +32,16 @@ export default class SimpleResultProcessing extends BaseResultProcessing {
                     value
                         .toLowerCase()
                         .split(",")
+                        .map((x) => x.trim())
                         .indexOf(row[field].toLowerCase()) >= 0
+                );
+            case "!in":
+                return (
+                    value
+                        .toLowerCase()
+                        .split(",")
+                        .map((x) => x.trim())
+                        .indexOf(row[field].toLowerCase()) < 0
                 );
         }
 
