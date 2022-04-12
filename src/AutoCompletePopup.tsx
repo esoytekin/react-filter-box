@@ -52,11 +52,77 @@ export default class AutoCompletePopup {
         return value;
     }
 
+    private inClausePick(
+        cm: any,
+        self: any,
+        data: Completion,
+        value: string | Object
+    ) {
+        if (data.type !== "value") {
+            return data.value;
+        }
+
+        const { operator } = data;
+
+        if (operator !== "in" && operator !== "!in") {
+            return data.value;
+        }
+
+        if (data.value === '","') {
+            const doc = cm.getDoc();
+            const text: string = doc.getRange({ line: 0, ch: 0 }, self.from);
+
+            cm.replaceRange(
+                text.trim(),
+                { line: 0, ch: 0 },
+                self.to,
+                "complete"
+            );
+
+            return ",";
+        }
+
+        if (data.value === '"END"') {
+            const doc = cm.getDoc();
+            const text: string = doc.getRange({ line: 0, ch: 0 }, self.from);
+
+            cm.replaceRange(
+                text.trim(),
+                { line: 0, ch: 0 },
+                self.to,
+                "complete"
+            );
+            return '"';
+        }
+
+        const doc = cm.getDoc();
+        const currentCursor = doc.getCursor();
+        const text: string = doc.getRange({ line: 0, ch: 0 }, self.from);
+
+        const lastIndexIN = text.lastIndexOf("in");
+
+        const userInput = doc.getRange(self.from, self.to);
+        const enteredValue = doc
+            .getRange({ line: 0, ch: lastIndexIN + 3 }, currentCursor)
+            .replace(userInput, "");
+
+        const val = typeof value === "string" ? value.replace(/"/g, "") : value;
+
+        if (_.isEmpty(enteredValue)) {
+            return `"${val}`;
+        }
+
+        return `${val}`;
+    }
+
     private onPick(cm: ExtendedCodeMirror, self: HintResult, data: Completion) {
         var value = data.value;
-        if (this.pick) {
+
+        if (this.pick && data.value !== '","' && data.value !== '"END"') {
             value = this.pick(cm, self, data);
         }
+
+        value = this.inClausePick(cm, self, data, value);
 
         if (typeof value !== "string") {
             return;
@@ -87,6 +153,14 @@ export default class AutoCompletePopup {
 
             return this.manualPick.bind(this, self, data);
         };
+        let val = data.value;
+        if (
+            data.value &&
+            typeof data.value === "string" &&
+            data.value.indexOf('"') > -1
+        ) {
+            val = data.value.replace(/"/g, "");
+        }
 
         if (this.customRenderCompletionItem) {
             ReactDOM.render(
@@ -98,7 +172,7 @@ export default class AutoCompletePopup {
                 div
             );
         } else {
-            ReactDOM.render(<div className={className}>{data.value}</div>, div);
+            ReactDOM.render(<div className={className}>{val}</div>, div);
         }
 
         element.appendChild(div);

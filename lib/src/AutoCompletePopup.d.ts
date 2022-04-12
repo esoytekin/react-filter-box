@@ -12,6 +12,7 @@ export default class AutoCompletePopup {
     pick: (cm: ExtendedCodeMirror, self: HintResult, data: Completion) => string;
     constructor(cm: ExtendedCodeMirror, needAutoCompletevalues: (text: string) => HintInfo[]);
     private processText;
+    private inClausePick;
     private onPick;
     private renderHintElement;
     private manualPick;

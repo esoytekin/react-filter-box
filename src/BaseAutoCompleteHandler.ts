@@ -7,11 +7,10 @@ import ParseTrace from "./ParseTrace";
 
 export default class BaseAutoCompleteHandler {
     quote(text: string, type: string) {
-        if (/\s/g.test(text)) {
-            return `"${text}"`;
+        if (type === "operator") {
+            return text;
         }
-
-        return text;
+        return `"${text}"`;
     }
 
     buildDefaultObjOrGetOriginal(

@@ -1,6 +1,6 @@
 import * as _ from "lodash";
 import BaseResultProcessing from "./BaseResultProcessing";
-import { Option } from "./GridDataAutoCompleteHandler"
+import { Option } from "./GridDataAutoCompleteHandler";
 
 export default class SimpleResultProcessing extends BaseResultProcessing {
     constructor(protected options?: Option[]) {
@@ -8,17 +8,41 @@ export default class SimpleResultProcessing extends BaseResultProcessing {
     }
 
     tryToGetFieldCategory(fieldOrLabel: string) {
-        var found = _.find(this.options, f => f.columnText == fieldOrLabel);
+        var found = _.find(this.options, (f) => f.columnText == fieldOrLabel);
         return found ? found.columnField : fieldOrLabel;
     }
 
     filter(row: any, fieldOrLabel: string, operator: string, value: string) {
         var field = this.tryToGetFieldCategory(fieldOrLabel);
         switch (operator) {
-            case "==": return row[field] == value;
-            case "!=": return row[field] != value;
-            case "contains": return row[field].toLowerCase().indexOf(value.toLowerCase()) >= 0;
-            case "!contains": return row[field].toLowerCase().indexOf(value.toLowerCase()) < 0;
+            case "==":
+                return row[field] == value;
+            case "!=":
+                return row[field] != value;
+            case "contains":
+                return (
+                    row[field].toLowerCase().indexOf(value.toLowerCase()) >= 0
+                );
+            case "!contains":
+                return (
+                    row[field].toLowerCase().indexOf(value.toLowerCase()) < 0
+                );
+            case "in":
+                return (
+                    value
+                        .toLowerCase()
+                        .split(",")
+                        .map((x) => x.trim())
+                        .indexOf(row[field].toLowerCase()) >= 0
+                );
+            case "!in":
+                return (
+                    value
+                        .toLowerCase()
+                        .split(",")
+                        .map((x) => x.trim())
+                        .indexOf(row[field].toLowerCase()) < 0
+                );
         }
 
         return false;
