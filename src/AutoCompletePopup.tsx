@@ -59,13 +59,13 @@ export default class AutoCompletePopup {
         value: string | Object
     ) {
         if (data.type !== "value") {
-            return data.value;
+            return value;
         }
 
         const { operator } = data;
 
         if (operator !== "in" && operator !== "!in") {
-            return data.value;
+            return value;
         }
 
         if (data.value === '","') {
