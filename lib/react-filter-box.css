@@ -14,6 +14,8 @@
   color: #E91E63;
 }
 .react-filter-box {
+  display: flex;
+  gap: 4px;
   overflow-y: hidden;
   height: 28px;
   padding: 4px 6px;
@@ -34,6 +36,7 @@
   -moz-transition: border linear 0.2s, box-shadow linear 0.2s;
   -o-transition: border linear 0.2s, box-shadow linear 0.2s;
   transition: border linear 0.2s, box-shadow linear 0.2s;
+  flex: 1 1 0%;
 }
 .react-filter-box.focus {
   border-color: #66afe9;
@@ -48,6 +51,10 @@
 .react-filter-box.error.focus {
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #ce8483;
 }
+.filter-buttons {
+  display: flex;
+  gap: 4px;
+}
 .CodeMirror-hints {
   padding: 5px;
   min-width: 100px;
@@ -60,4 +67,7 @@ li.CodeMirror-hint-active {
 }
 li.CodeMirror-hint-active .hint-value {
   color: white;
+}
+.react-codemirror2 {
+  flex-grow: 1;
 }

@@ -12,6 +12,7 @@ export default class FilterQueryParser {
     parse(query: string): Expression[] | ParsedError;
     private parseQuery;
     getSuggestions(query: string, cm: ExtendedCodeMirror): HintInfo[];
+    putAndOR(query: string, cm: ExtendedCodeMirror): HintInfo[];
     setAutoCompleteHandler(autoCompleteHandler: BaseAutoCompleteHandler): void;
 }
 export interface ExtendedParser extends PEG.Parser {

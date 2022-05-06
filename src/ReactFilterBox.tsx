@@ -129,6 +129,17 @@ export default class ReactFilterBox extends React.Component<any, any> {
                     onChange={this.onChange.bind(this)}
                     editorConfig={this.props.editorConfig}
                 />
+                <div className="filter-buttons">
+                    <button
+                        className="ant-btn ant-btn-text ant-btn-icon-only"
+                        type="button"
+                        onClick={() => {
+                            this.refFilter.clearInput();
+                        }}
+                    >
+                        x
+                    </button>
+                </div>
             </div>
         );
     }

@@ -117,8 +117,8 @@ export default class FilterInput extends React.Component<any, any> {
     }
 
     clearInput() {
+        this.codeMirror.focus();
         this.codeMirror.setValue("");
-        this.autoCompletePopup.hide();
     }
 
     render() {

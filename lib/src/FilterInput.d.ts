@@ -24,5 +24,6 @@ export default class FilterInput extends React.Component<any, any> {
     private codeMirrorRef;
     private handleEditorChange;
     clearInput(): void;
+    andOrClick(): void;
     render(): JSX.Element;
 }
