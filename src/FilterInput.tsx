@@ -100,9 +100,11 @@ export default class FilterInput extends React.Component<any, any> {
         });
 
         ref.editor.on("keyup", (cm: ExtendedCodeMirror, e?: KeyboardEvent) => {
-            if (e.keyCode == 13) {
-                this.onSubmit(this.doc.getValue(), e);
-            }
+            this.onSubmit(this.doc.getValue(), e);
+        });
+
+        ref.editor.on("clear", () => {
+            console.log("clear called");
         });
     }
 
@@ -112,6 +114,11 @@ export default class FilterInput extends React.Component<any, any> {
         value: string
     ) {
         this.props.onChange(value);
+    }
+
+    clearInput() {
+        this.codeMirror.setValue("");
+        this.autoCompletePopup.hide();
     }
 
     render() {

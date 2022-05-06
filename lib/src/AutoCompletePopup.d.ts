@@ -19,6 +19,7 @@ export default class AutoCompletePopup {
     private buildComletionObj;
     private findLastSeparatorPositionWithEditor;
     show(): void;
+    hide(): void;
     private createHintOption;
 }
 interface PickFunc {

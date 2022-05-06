@@ -1,4 +1,5 @@
 import * as React from "react";
+import * as ReactDOM from "react-dom";
 import * as _ from "lodash";
 import FilterInput from "./FilterInput";
 import SimpleResultProcessing from "./SimpleResultProcessing";
@@ -28,6 +29,7 @@ export default class ReactFilterBox extends React.Component<any, any> {
     };
 
     parser = new FilterQueryParser();
+    refFilter: any = null;
 
     constructor(props: any) {
         super(props);
@@ -45,6 +47,7 @@ export default class ReactFilterBox extends React.Component<any, any> {
             isFocus: false,
             isError: false,
         };
+
         //need onParseOk, onParseError, onChange, options, data
     }
 
@@ -95,6 +98,10 @@ export default class ReactFilterBox extends React.Component<any, any> {
         this.setState({ isFocus: true });
     }
 
+    clear() {
+        this.refFilter.clearInput();
+    }
+
     render() {
         var className = "react-filter-box";
         if (this.state.isFocus) {
@@ -107,6 +114,7 @@ export default class ReactFilterBox extends React.Component<any, any> {
         return (
             <div className={className}>
                 <FilterInput
+                    ref={(ins) => (this.refFilter = ins)}
                     autoCompletePick={this.props.autoCompletePick}
                     customRenderCompletionItem={
                         this.props.customRenderCompletionItem

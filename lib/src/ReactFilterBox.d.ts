@@ -9,12 +9,14 @@ import { ExtendedCodeMirror } from "./models/ExtendedCodeMirror";
 export default class ReactFilterBox extends React.Component<any, any> {
     static defaultProps: any;
     parser: FilterQueryParser;
+    refFilter: any;
     constructor(props: any);
     needAutoCompleteValues(codeMirror: ExtendedCodeMirror, text: string): import("./models/ExtendedCodeMirror").HintInfo[];
     onSubmit(query: string, e: any): any;
     onChange(query: string): void;
     onBlur(): void;
     onFocus(): void;
+    clear(): void;
     render(): JSX.Element;
 }
 export { SimpleResultProcessing, BaseResultProcessing, GridDataAutoCompleteHandler, BaseAutoCompleteHandler, Option as AutoCompleteOption, Expression, };
